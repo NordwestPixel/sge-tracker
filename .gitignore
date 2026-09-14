@@ -1,0 +1,17 @@
+# Rust build output (any directory)
+target/
+
+# Secrets — keep the example file
+.env
+.env.*
+!.env.example
+
+# Editors
+.idea/
+.vscode/
+*.kate-swp
+*.swp
+*~
+
+# OS
+.DS_Store

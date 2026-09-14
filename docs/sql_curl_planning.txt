@@ -1,0 +1,59 @@
+teams -> curl -X 'GET' \
+  'https://api.openligadb.de/getavailableteams/bl1/2026' \
+  -H 'accept: application/json'
+
+  gives back:
+    teamId (int), teamName (String), shortName (String), teamIconUrl (String) - {PNGs, SVGs, JPGs, maybe more}, teamGroupName: ignore
+
+  Actually this is unnecessary and its better to get the teams from past and future games of the teamId (SGE = 91).
+  First time running will curl all past games and future games (needs weeks parameter, range needs to be thought about). After that runs with a set sync timer for future game updates, past is probably set up correctly first time and can be limited to 5 weeks.
+
+  curl -X 'GET' \
+  'https://api.openligadb.de/getmatchesbyteamid/{teamId}/{weekCountPast}/{weekCountFuture}' \
+  -H 'accept: application/json'
+
+  gives back:
+    matchID (int), matchDateTime (String($date-time)), timeZoneID (String), leagueId (int), leagueName (String), leagueSeason (int) leagueShortcut (String), matchDateTimeUTC (String($date-time)), group group{groupName (String), groupOrderId (int), groupID (int)}, team1 team-table above, team2 team-table above, lastUpdateDateTime (String($date-time)), matchIsFinished (bool), matchResults MatchResult table, goals Goal table, {location {locationID (int), locationCity (String), locationStadium (string)}, numberOfViewers (int)} almost always null
+
+    Used to fill more tables. Should have a league allowlist so we dont end up in unnecessary leagues (mandatory bundesliga leagues, uefa leagues, dfb leagues for upper leagues).
+
+tables:
+  teams:
+    team_id (PK, INTEGER), team_name (NOT NULL, TEXT), short_name (TEXT), team_icon_url (TEXT)
+
+  matches:
+    match_id (PK, INTEGER), match_datetime (TIMESTAPMTZ), league_id (FK, INTEGER), home_id (FK, INTEGER), away_id (FK, INTEGER), last_update (TIMESTAPMTZ), is_finished (BOOLEAN), result_id (FK, INTEGER)
+
+  results:
+    result_id (PK, INTEGER), result_name (TEXT), home_goals (INTEGER, DEFAULT 0), away_goals (INTEGER, DEFAULT 0), goals?
+
+  goals:
+    goal_id (PK, INTEGER), player_name (TEXT), scoring_team_id (FK, INTEGER), is_penalty (BOOLEAN), is_own_goal (BOOLEAN), is_overtime (BOOLEAN)
+
+
+Tracks past games for two teams versing:
+    curl -X 'GET' \
+        'https://api.openligadb.de/getmatchdata/{teamId1}/{teamId2}' \
+        -H 'accept: application/json'
+
+    Should not be needed when the getmatchesbyteamid curl fills enough data
+
+league_table -> curl -X 'GET' \
+  'https://api.openligadb.de/getbltable/{league_shortcut}/{league_season}' \
+  -H 'accept: text/json'
+
+gives back:
+    teamInfoId (int) -> basically teamId, teamName: ignore, shortName: ignore, teamIconUrl: ignore, points (int), opponentGoals (int), goals (int), matches (int) -> can be calculated, won (int), lost (int), draw (int), goalDiff (int) -> can be calculated
+
+tables:
+  league_table:
+    league_id (PK with team_id, FK, INTEGER, UNIQUE with position), team_id (PK with league_id, FK, INTEGER), position (INTEGER, UNIQUE with league_id), points (INTEGER), opponent_goals (INTEGER), goals (INTEGER), won (INTEGER), lost (INTEGER), draw (INTEGER), PK (league_id, team_id), UNIQUE (league_id, position)
+
+    INTEGER all NOT NULL to fail loudly, CHECK >= 0 all INTEGER (not points and >= 1 for position)
+
+    Removed matches and goalDiff from the table cause they can be calculated. Left points for exceptions like points removed by DFB
+
+  leagues:
+    league_id (PK, INTEGER), league_name (TEXT, NOT NULL), league_shortcut (TEXT, NOT NULL), league_season (TEXT, NOT NULL), UNIQUE (league_shortcut, league_season)
+
+    Gets filled with running the getmatchesbyteamid curl the first time.
