@@ -1,0 +1,61 @@
+teams:
+    team_id PK INTEGER
+    name TEXT NOT NULL
+    short_name TEXT
+    icon_url TEXT
+
+leagues:
+    league_id PK INTEGER
+    name TEXT NOT NULL
+    shortcut TEXT NOT NULL
+    season INTEGER NOT NULL
+    UNIQUE (shortcut, season)
+
+matches:
+    match_id PK INTEGER
+    league_id FK INTEGER NOT NULL
+    matchday INTEGER NOT NULL //group.groupOrderID matchday for leagues, round for cups
+    matchday_name TEXT NOT NULL //group.groupName
+    home_team_id FK INTEGER NOT NULL
+    away_team_id FK INTEGER NOT NULL
+    kickoff_at TIMESTAMPTZ NOT NULL
+    is_finished BOOLEAN NOT NULL
+    source_updated_at TIMESTAMP
+    CHECK home_team_id NOT EQUAL away_team_id
+
+match_results:
+    match_id FK INTEGER ON DELETE CASCADE
+    result_type_id FK INTEGER
+    home_goals INTEGER NOT NULL CHECK >= 0
+    away_goals INTEGER NOT NULL CHECK >= 0
+    PK (match_id, result_type_id)
+
+result_types:
+    result_type_id PK INTEGER
+    name TEXT NOT NULL
+    {1 half-time, 2 after 90 min, 3 after stoppage time, 4 after extra time, 5 after penalties}
+
+goals:
+    goal_id PK INTEGER
+    match_id FK INTEGER NOT NULL ON DELETE CASCADE
+    home_score INTEGER NOT NULL CHECK >= 0
+    away_score INTEGER NOT NULL CHECK >= 0
+    minute INTEGER
+    player_name TEXT
+    scoring_team_id FK INTEGER
+    is_penalty BOOLEAN NOT NULL
+    is_own_goal BOOLEAN NOT NULL
+    is_overtime BOOLEAN NOT NULL
+
+standings:
+    league_id FK INTEGER
+    team_id FK INTEGER
+    position INTEGER NOT NULL CHECK >= 1
+    points INTEGER NOT NULL
+    won INTEGER NOT NULL CHECK >= 0
+    draw INTEGER NOT NULL CHECK >= 0
+    lost INTEGER NOT NULL CHECK >= 0
+    goals_for INTEGER NOT NULL CHECK >= 0
+    goals_against INTEGER NOT NULL CHECK >= 0
+    PK (league_id, team_id)
+    UNIQUE (league_id, position)
