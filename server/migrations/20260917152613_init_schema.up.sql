@@ -91,6 +91,12 @@ CREATE TABLE standings
     UNIQUE (league_id, position)
 );
 
+CREATE TABLE sync_status
+(
+    league_id    INTEGER PRIMARY KEY REFERENCES leagues,
+    last_updated TIMESTAMPTZ NOT NULL
+);
+
 CREATE INDEX matches_kickoff_idx ON matches (kickoff_at);
 CREATE INDEX matches_home_idx ON matches (home_team_id);
 CREATE INDEX matches_away_idx ON matches (away_team_id);

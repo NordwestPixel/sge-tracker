@@ -1,3 +1,4 @@
+DROP TABLE sync_status;
 DROP TABLE standings;
 DROP TABLE goals;
 DROP TABLE match_results;
