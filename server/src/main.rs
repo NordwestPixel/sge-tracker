@@ -48,6 +48,7 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
     let config = config::Config::load_from_env()?;
 
     let pool = connect_pool(config.db_max_connections.get(), &config.database_url).await?;
+    sqlx::migrate!("./migrations").run(&pool).await?;
 
     let state = state::AppState::new(pool, config.clone());
 
