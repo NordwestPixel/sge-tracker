@@ -8,6 +8,7 @@ pub struct Config {
     pub bind_addr: String,
     pub db_max_connections: NonZeroU32,
     pub sync_interval_secs: NonZeroU64,
+    pub http_timeout_secs: NonZeroU64,
     pub openligadb_url: String,
     pub team_id: i32,
     pub league_list: Vec<TrackedLeague>,
@@ -27,6 +28,7 @@ impl Config {
         let bind_addr = get_var("BIND_ADDR")?;
         let db_max_connections = get_parse_var("DB_MAX_CONNECTIONS")?;
         let sync_interval_secs = get_parse_var("SYNC_INTERVAL_SECS")?;
+        let http_timeout_secs = get_parse_var("HTTP_TIMEOUT_SECS")?;
         let openligadb_url = get_var("OPENLIGADB_BASE_URL")?;
         let team_id = get_parse_var("TEAM_ID")?;
         let league_list = get_league_list("LEAGUE_LIST")?;
@@ -36,6 +38,7 @@ impl Config {
             bind_addr,
             db_max_connections,
             sync_interval_secs,
+            http_timeout_secs,
             openligadb_url,
             team_id,
             league_list,

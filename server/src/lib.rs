@@ -17,6 +17,8 @@ pub async fn run() -> Result<(), InitError> {
     let pool = connect_pool(config.db_max_connections.get(), &config.database_url).await?;
     sqlx::migrate!("./migrations").run(&pool).await?;
 
+    sync::start(pool.clone(), &config)?;
+
     let listener = tokio::net::TcpListener::bind(&config.bind_addr)
         .await
         .map_err(|source| InitError::Bind {

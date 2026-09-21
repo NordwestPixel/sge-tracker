@@ -3,6 +3,7 @@ use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use thiserror::Error;
 use tracing::error;
+use crate::sync::error::SyncError;
 
 #[derive(Error, Debug)]
 pub enum AppError {
@@ -36,4 +37,6 @@ pub enum InitError {
     },
     #[error("Server stopped accepting connections")]
     Serve(#[from] std::io::Error),
+    #[error(transparent)]
+    Sync(#[from] SyncError),
 }
