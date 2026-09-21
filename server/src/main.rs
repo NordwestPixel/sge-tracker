@@ -12,6 +12,7 @@ mod http;
 mod matches;
 mod standings;
 mod state;
+mod sync;
 
 #[tokio::main]
 async fn main() -> ExitCode {
