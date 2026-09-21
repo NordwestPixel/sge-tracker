@@ -1,0 +1,14 @@
+# Keep GitHub's language statistics about code that was actually written here.
+# linguist-generated also collapses these files in pull request diffs.
+# https://github.com/github-linguist/linguist/blob/main/docs/overrides.md
+
+# Platform scaffolding produced by `flutter create`.
+app/android/**            linguist-generated
+app/ios/**                linguist-generated
+app/.metadata             linguist-generated
+app/analysis_options.yaml linguist-generated
+
+# Produced by cargo and sqlx-cli; committed on purpose, but not hand-written.
+server/Cargo.lock         linguist-generated
+server/build.rs           linguist-generated
+server/.sqlx/**           linguist-generated
