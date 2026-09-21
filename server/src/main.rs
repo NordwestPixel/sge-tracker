@@ -10,7 +10,6 @@ mod db;
 mod error;
 mod http;
 mod matches;
-mod models;
 mod standings;
 mod state;
 
