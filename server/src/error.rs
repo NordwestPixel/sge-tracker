@@ -1,3 +1,4 @@
+use crate::config::ConfigError;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use thiserror::Error;
@@ -18,4 +19,21 @@ impl IntoResponse for AppError {
             }
         }
     }
+}
+
+#[derive(Error, Debug)]
+pub enum InitError {
+    #[error(transparent)]
+    Config(#[from] ConfigError),
+    #[error(transparent)]
+    Pool(#[from] sqlx::Error),
+    #[error(transparent)]
+    Migrate(#[from] sqlx::migrate::MigrateError),
+    #[error("bind: {address} with error: {source}")]
+    Bind {
+        address: String,
+        source: std::io::Error,
+    },
+    #[error("Server stopped accepting connections")]
+    Serve(#[from] std::io::Error),
 }
