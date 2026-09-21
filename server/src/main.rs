@@ -3,7 +3,7 @@ use crate::http::router::build_router;
 use dotenvy::dotenv;
 use std::process::ExitCode;
 use tracing::{error, info};
-use tracing_subscriber::{EnvFilter, fmt, prelude::*};
+use tracing_subscriber::{EnvFilter, filter::LevelFilter, fmt, prelude::*};
 
 mod config;
 mod db;
@@ -20,7 +20,12 @@ async fn main() -> ExitCode {
 
     tracing_subscriber::registry()
         .with(fmt::layer())
-        .with(EnvFilter::from_env("LOG_LEVEL"))
+        .with(
+            EnvFilter::builder()
+                .with_default_directive(LevelFilter::INFO.into())
+                .with_env_var("LOG_LEVEL")
+                .from_env_lossy(),
+        )
         .init();
 
     match env_status {
