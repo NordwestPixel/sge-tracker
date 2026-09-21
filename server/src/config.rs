@@ -3,7 +3,6 @@ use std::num::{NonZeroU32, NonZeroU64, ParseIntError};
 use std::str::{FromStr, ParseBoolError};
 use thiserror::Error;
 
-#[derive(Clone)]
 pub struct Config {
     pub database_url: String,
     pub bind_addr: String,
