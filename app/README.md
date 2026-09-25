@@ -1,6 +1,6 @@
-# sge_tracker
+# matchday_tracker
 
-Eintracht Frankfurt matchday tracker
+Unofficial matchday tracker for Eintracht Frankfurt.
 
 ## Getting Started
 

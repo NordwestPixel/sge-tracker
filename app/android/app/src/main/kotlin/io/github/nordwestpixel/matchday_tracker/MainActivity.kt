@@ -1,4 +1,4 @@
-package io.github.nordwestpixel.sge_tracker
+package io.github.nordwestpixel.matchday_tracker
 
 import io.flutter.embedding.android.FlutterActivity
 

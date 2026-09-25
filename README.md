@@ -1,8 +1,8 @@
-# SGE Tracker
+# Matchday Tracker
 
-A matchday tracker for Eintracht Frankfurt: a Rust backend that syncs fixtures, results and
-standings from [OpenLigaDB](https://www.openligadb.de/) into PostgreSQL, and a Flutter app that
-reads from it.
+An unofficial matchday tracker for Eintracht Frankfurt: a Rust backend that syncs fixtures,
+results and standings from [OpenLigaDB](https://www.openligadb.de/) into PostgreSQL, and a
+Flutter app that reads from it.
 
 > **Work in progress.** The backend's OpenLigaDB client and data mapping are done; the sync job,
 > the API endpoints and the app are still being built.
@@ -40,7 +40,7 @@ cargo run                     # runs migrations, then serves on BIND_ADDR
 ```
 
 For the local container, `DATABASE_URL` is
-`postgres://sge:<POSTGRES_PASSWORD>@127.0.0.1:5433/sge_tracker`.
+`postgres://matchday:<POSTGRES_PASSWORD>@127.0.0.1:5433/matchday_tracker`.
 
 ```bash
 cargo test                    # offline tests

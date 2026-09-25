@@ -1,18 +1,18 @@
-name: sge_server
+name: matchday_tracker
 services:
   db:
-    container_name: sge-postgres
+    container_name: matchday-postgres
     image: postgres:17
     restart: unless-stopped
     environment:
-      POSTGRES_USER: sge
+      POSTGRES_USER: matchday
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?"set POSTGRES_PASSWORD in server/.env"}
-      POSTGRES_DB: sge_tracker
+      POSTGRES_DB: matchday_tracker
     ports:
       - "127.0.0.1:5433:5432"
     volumes:
-      - sge_pgdata:/var/lib/postgresql/data
+      - matchday_pgdata:/var/lib/postgresql/data
 
 volumes:
-  sge_pgdata:
-    name: sge_pgdata
+  matchday_pgdata:
+    name: matchday_pgdata
