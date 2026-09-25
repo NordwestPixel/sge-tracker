@@ -1,9 +1,9 @@
 use crate::config::ConfigError;
+use crate::sync::error::SyncError;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use thiserror::Error;
 use tracing::error;
-use crate::sync::error::SyncError;
 
 #[derive(Error, Debug)]
 pub enum AppError {

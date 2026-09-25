@@ -50,7 +50,7 @@ fn get_var(name: &'static str) -> Result<String, ConfigError> {
     env::var(name).map_err(|source| ConfigError::Missing { name, source })
 }
 
-fn get_parse_var<F: FromStr<Err=ParseIntError>>(name: &'static str) -> Result<F, ConfigError> {
+fn get_parse_var<F: FromStr<Err = ParseIntError>>(name: &'static str) -> Result<F, ConfigError> {
     get_var(name)?
         .parse()
         .map_err(|source| ConfigError::Invalid { name, source })
@@ -74,20 +74,26 @@ fn get_league_list(name: &'static str) -> Result<Vec<TrackedLeague>, ConfigError
 
         leagues.push(TrackedLeague {
             shortcut: shortcut.to_string(),
-            season: season.parse().map_err(|e: ParseIntError| ConfigError::InvalidEntry {
-                name,
-                entry: entry.to_string(),
-                reason: e.to_string(),
-            })?,
-            league_id: league_id.parse().map_err(|e: ParseIntError| ConfigError::InvalidEntry {
-                name,
-                entry: entry.to_string(),
-                reason: e.to_string(),
-            })?,
-            has_table: has_table.parse().map_err(|e: ParseBoolError| ConfigError::InvalidEntry {
-                name,
-                entry: entry.to_string(),
-                reason: e.to_string(),
+            season: season
+                .parse()
+                .map_err(|e: ParseIntError| ConfigError::InvalidEntry {
+                    name,
+                    entry: entry.to_string(),
+                    reason: e.to_string(),
+                })?,
+            league_id: league_id
+                .parse()
+                .map_err(|e: ParseIntError| ConfigError::InvalidEntry {
+                    name,
+                    entry: entry.to_string(),
+                    reason: e.to_string(),
+                })?,
+            has_table: has_table.parse().map_err(|e: ParseBoolError| {
+                ConfigError::InvalidEntry {
+                    name,
+                    entry: entry.to_string(),
+                    reason: e.to_string(),
+                }
             })?,
         });
     }

@@ -1,7 +1,7 @@
-use axum::Router;
-use tower_http::trace::TraceLayer;
 use crate::http::routes;
 use crate::state::AppState;
+use axum::Router;
+use tower_http::trace::TraceLayer;
 
 pub fn build_router(state: AppState) -> Router {
     Router::new()
