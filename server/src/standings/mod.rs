@@ -1,3 +1,3 @@
-pub mod handlers;
-pub mod repo;
-mod model;
+mod handlers;
+pub(crate) mod model;
+pub(crate) mod repo;

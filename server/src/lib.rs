@@ -7,6 +7,7 @@ mod db;
 mod error;
 pub mod http;
 mod matches;
+mod reference;
 mod standings;
 pub mod state;
 mod sync;
